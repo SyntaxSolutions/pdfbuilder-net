@@ -1,0 +1,10 @@
+/.vs
+/src/PdfBuilder/bin
+/src/PdfBuilder/obj
+/src/PdfFileWriter/bin
+/src/PdfFileWriter/obj
+/packages
+/tests/obj
+/tests/bin
+/tests/PdfBuilder-tests.csproj.user
+/src/Properties/PublishProfiles/FolderProfile.pubxml.user
