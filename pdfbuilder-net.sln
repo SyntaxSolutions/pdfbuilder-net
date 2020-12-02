@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{116D66AF-F54B-4255-B770-45885E4918B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfFileWriter", "src\PdfFileWriter\PdfFileWriter.csproj", "{7B531568-9C87-4CC5-917D-28C43BCF5B38}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A2C1B0B4-125A-4278-A825-535BAE7802E7}"
+	ProjectSection(SolutionItems) = preProject
+		build\package-icon.png = build\package-icon.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{568EE274-2F64-4863-B275-8C86F7B83AAE}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfBuilder", "src\PdfBuilder\PdfBuilder.csproj", "{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{85A8EB8D-695F-4C21-9434-7B7A69EB669A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfBuilder-tests", "tests\PdfBuilder-tests.csproj", "{AE45DBAB-4723-47B5-8356-CF2110DAEC24}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B531568-9C87-4CC5-917D-28C43BCF5B38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B531568-9C87-4CC5-917D-28C43BCF5B38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B531568-9C87-4CC5-917D-28C43BCF5B38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B531568-9C87-4CC5-917D-28C43BCF5B38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE45DBAB-4723-47B5-8356-CF2110DAEC24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE45DBAB-4723-47B5-8356-CF2110DAEC24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE45DBAB-4723-47B5-8356-CF2110DAEC24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE45DBAB-4723-47B5-8356-CF2110DAEC24}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7B531568-9C87-4CC5-917D-28C43BCF5B38} = {116D66AF-F54B-4255-B770-45885E4918B3}
+		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A} = {116D66AF-F54B-4255-B770-45885E4918B3}
+		{AE45DBAB-4723-47B5-8356-CF2110DAEC24} = {85A8EB8D-695F-4C21-9434-7B7A69EB669A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CA781FC-3D91-4332-A9D8-27650EDD2E0C}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <RootNamespace>SyntaxSolutions.PdfBuilder</RootNamespace>
+    <PackageId>SyntaxSolutions.PdfBuilder</PackageId>
+    <Authors>Syntax Solutions Ltd</Authors>
+    <Company>Syntax Solutions Ltd</Company>
+    <Description>A simple .Net library used to generate PDF files</Description>
+    <Copyright>Syntax Solutions Ltd</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>package-icon.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>c#,.Net,PDF</PackageTags>
+    <PackageReleaseNotes>A simple .Net library used to generate PDF files</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\build\package-icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PdfFileWriter\PdfFileWriter.csproj" />
+  </ItemGroup>
+
+</Project>
