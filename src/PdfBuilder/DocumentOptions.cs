@@ -7,12 +7,10 @@ namespace SyntaxSolutions.PdfBuilder
     {
         public PageSize PageSize { get; set; }
         public PageOrientation PageOrientation { get; set; }
-
         public double MarginLeft { get; set; }
         public double MarginTop { get; set; }
         public double MarginRight { get; set; }
         public double MarginBottom { get; set; }
-
         public TextFontOptions TitleFontOptions { get; set; }
         public TextFontOptions HeadingFontOptions { get; set; }
         public TextFontOptions TextFontOptions { get; set; }

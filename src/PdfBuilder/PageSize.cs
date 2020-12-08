@@ -9,7 +9,7 @@ namespace SyntaxSolutions.PdfBuilder
     public enum PageSize
 	{
 		/// <summary>
-		/// A0 (841 x 11881mm)
+		/// A0 (841 x 1188mm)
 		/// </summary>
 		A0,
 
@@ -52,5 +52,119 @@ namespace SyntaxSolutions.PdfBuilder
 		/// A8 (52 x 745mm)
 		/// </summary>
 		A8
+	}
+
+	internal static class PageSizeCalc
+	{
+		/// <summary>
+		/// Return width of specified pageSize
+		/// </summary>
+		/// <param name="pageSize"></param>
+		/// <returns></returns>
+		public static double Width(PageSize pageSize)
+		{
+			double value = 0;
+
+			switch (pageSize)
+			{
+				case PageSize.A0:
+					value = 841;
+					break;
+
+				case PageSize.A1:
+					value = 549;
+					break;
+
+				case PageSize.A2:
+					value = 420;
+					break;
+
+				case PageSize.A3:
+					value = 297;
+					break;
+
+				case PageSize.A4:
+					value = 210;
+					break;
+
+				case PageSize.A5:
+					value = 148;
+					break;
+
+				case PageSize.A6:
+					value = 105;
+					break;
+
+				case PageSize.A7:
+					value = 74;
+					break;
+
+				case PageSize.A8:
+					value = 52;
+					break;
+
+				default:
+					value = 0;
+					break;
+			}
+
+			return value;
+		}
+
+		/// <summary>
+		///  Return height of specified pageSize
+		/// </summary>
+		/// <param name="pageSize"></param>
+		/// <returns></returns>
+		public static double Height(PageSize pageSize)
+		{
+			double value = 0;
+
+			switch (pageSize)
+			{
+				case PageSize.A0:
+					value = 1188;
+					break;
+
+				case PageSize.A1:
+					value = 841;
+					break;
+
+				case PageSize.A2:
+					value = 594;
+					break;
+
+				case PageSize.A3:
+					value = 420;
+					break;
+
+				case PageSize.A4:
+					value = 297;
+					break;
+
+				case PageSize.A5:
+					value = 210;
+					break;
+
+				case PageSize.A6:
+					value = 148;
+					break;
+
+				case PageSize.A7:
+					value = 105;
+					break;
+
+				case PageSize.A8:
+					value = 74;
+					break;
+
+				default:
+					value = 0;
+					break;
+			}
+
+			return value;
+		}
+
 	}
 }

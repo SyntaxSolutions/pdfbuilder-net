@@ -9,10 +9,32 @@ namespace PdfBuilder_tests
     [TestClass]
     public class UnitTests
     {
+        private void PageHeader(PdfBuilder builder, PageHeaderEventArgs e)
+        {
+            builder.AddText("...PAGE HEADER...");
+            builder.NewLine();
+        }
+
+        private void PageFooter(PdfBuilder builder, PageFooterEventArgs e)
+        {
+            var postionY = builder.PagePositionY; 
+            builder.PagePositionY = 10; 
+            builder.AddText(String.Format("...PAGE FOOTER... | Page: {0}", builder.PageCount.ToString()));
+            builder.PagePositionY = postionY;
+        }
+
         [TestMethod]
         public void TestAddTitle()
         {
-            var builder = new PdfBuilder();
+            var options = new DocumentOptions()
+            {
+                PageSize = PageSize.A4,
+                PageOrientation = PageOrientation.Landscape
+            };
+            var builder = new PdfBuilder(options);
+
+            builder.PageHeader += new PageHeaderEventHandler(this.PageHeader);
+            builder.PageFooter += new PageFooterEventHandler(this.PageFooter);
 
             builder.Open();
 

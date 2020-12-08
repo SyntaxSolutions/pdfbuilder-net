@@ -1,6 +1,6 @@
 ﻿
+using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 
 using PdfFileWriter; // https://www.codeproject.com/Articles/570682/PDF-File-Writer-Csharp-Class-Library-Version-1-27
@@ -14,21 +14,31 @@ namespace SyntaxSolutions.PdfBuilder
         private PdfContents contents;
         private Dictionary<string, PdfFont> fontDictionary;
         private MemoryStream stream;
-
         private SizeD pageDimensions;
         private PointD pagePosition;
-
         private DocumentOptions documentOptions;
-        private double scaleFactor;
 
-        internal static double[] UnitInPoints = new double[]
+        /// <summary>
+        /// Get the page height
+        /// </summary>
+        public double PageWidth
         {
-            1.0,			// Point
-		    72.0,			// Inch
-		    72.0 / 2.54,	// cm
-		    72.0 / 25.4,	// mm
-		    72.0 / 0.0254,  // meter
-        };
+            get
+            {
+                return this.pageDimensions.Width;
+            }
+        }
+
+        /// <summary>
+        /// Get the page width
+        /// </summary>
+        public double PageHeight
+        {
+            get
+            {
+                return this.pageDimensions.Height;
+            }
+        }
 
         /// <summary>
         /// Get the current horizontal postion of the page cursor
@@ -61,6 +71,27 @@ namespace SyntaxSolutions.PdfBuilder
                 this.pagePosition.Y = value;
             }
         }
+
+        /// <summary>
+        /// Get the current page count
+        /// </summary>
+        public int PageCount
+        {
+            get
+            {
+                return this.document.PageCount;
+            }
+        }
+
+        /// <summary>
+        /// Occurs when a new page is created 
+        /// </summary>
+        public event PageHeaderEventHandler PageHeader;
+
+        /// <summary>
+        /// Occurs when a new page is created 
+        /// </summary>
+        public event PageFooterEventHandler PageFooter;
 
         /// <summary>
         /// Create a new PdfBuilder
@@ -98,83 +129,39 @@ namespace SyntaxSolutions.PdfBuilder
         /// <summary>
         /// Open a new document 
         /// </summary>
-        /// <param name="filePath"></param>
         public void Open()
         {
-            this.pageDimensions = new SizeD();
+            // determine the page dimensions based on the specified DocumentOptions 
+            double width = PageSizeCalc.Width(this.documentOptions.PageSize);
+            double height = PageSizeCalc.Height(this.documentOptions.PageSize);
 
-            switch (this.documentOptions.PageSize)
-            {
-                case PageSize.A0:
-                    this.pageDimensions.Width = 841;
-                    this.pageDimensions.Height = 1188;
-                    break;
-
-                case PageSize.A1:
-                    this.pageDimensions.Width = 549;
-                    this.pageDimensions.Height = 841;
-                    break;
-
-                case PageSize.A2:
-                    this.pageDimensions.Width = 420;
-                    this.pageDimensions.Height = 594;
-                    break;
-
-                case PageSize.A3:
-                    this.pageDimensions.Width = 297;
-                    this.pageDimensions.Height = 420;
-                    break;
-
-                case PageSize.A4:
-                    this.pageDimensions.Width = 210;
-                    this.pageDimensions.Height = 297;
-                    break;
-
-                case PageSize.A5:
-                    this.pageDimensions.Width = 148;
-                    this.pageDimensions.Height = 210;
-                    break;
-
-                case PageSize.A6:
-                    this.pageDimensions.Width = 105;
-                    this.pageDimensions.Height = 148;
-                    break;
-
-                case PageSize.A7:
-                    this.pageDimensions.Width = 74;
-                    this.pageDimensions.Height = 105;
-                    break;
-
-                case PageSize.A8:
-                    this.pageDimensions.Width = 52;
-                    this.pageDimensions.Height = 74;
-                    break;
-
-                default:
-                    this.pageDimensions.Width = 0;
-                    this.pageDimensions.Height = 0;
-                    break;
-            }
+            this.pageDimensions = new SizeD(width, height);
 
             if (this.documentOptions.PageOrientation == PageOrientation.Landscape)
             {
-                var width = this.pageDimensions.Width;
-                var height = this.pageDimensions.Height;
                 this.pageDimensions.Height = width;
                 this.pageDimensions.Width = height;
             }
-
-            // scale factor for converting point to mm (based on 72 dpi)
-            this.scaleFactor = UnitInPoints[(int)UnitOfMeasure.mm];
 
             // create document 
             this.stream = new MemoryStream();
             this.document = new PdfDocument(this.pageDimensions.Width, this.pageDimensions.Height, UnitOfMeasure.mm, this.stream);
 
-            this.fontDictionary = new Dictionary<string, PdfFont>();
-
             // build a new font dictionary for this document
+            this.fontDictionary = new Dictionary<string, PdfFont>();
             Dictionary<TextFontStyle, PdfFont> fontDictionary = new Dictionary<TextFontStyle, PdfFont>();
+        }
+
+        /// <summary>
+        /// Close the document
+        /// </summary>
+        public void Close()
+        {
+            if (this.stream != null)
+            {
+                this.stream.Close();
+                this.stream = null;
+            }
         }
 
         /// <summary>
@@ -193,19 +180,7 @@ namespace SyntaxSolutions.PdfBuilder
         }
 
         /// <summary>
-        /// Close the document
-        /// </summary>
-        public void Close()
-        {
-            if (this.stream != null)
-            {
-                this.stream.Close();
-                this.stream = null;
-            }
-        }
-
-        /// <summary>
-        /// Add a new page to the document
+        /// Add a new page to the document and reset the PagePosition
         /// </summary>
         public void NewPage()
         {
@@ -214,6 +189,10 @@ namespace SyntaxSolutions.PdfBuilder
 
             // set initial position to top left corner
             this.pagePosition = new PointD(this.documentOptions.MarginLeft, (this.pageDimensions.Height - this.documentOptions.MarginTop));
+
+            // invoke any page header and footer event handlers 
+            this.PageHeader?.Invoke(this, new PageHeaderEventArgs());
+            this.PageFooter?.Invoke(this, new PageFooterEventArgs());
         }
 
         /// <summary>
@@ -224,7 +203,7 @@ namespace SyntaxSolutions.PdfBuilder
         {
             if (!lineHeight.HasValue)
             {
-                lineHeight = (this.documentOptions.TextFontOptions.FontSize * 1.5) / this.scaleFactor;
+                lineHeight = (this.documentOptions.TextFontOptions.FontSize * 1.5) / this.document.ScaleFactor;
             }
 
             this.pagePosition.X = this.documentOptions.MarginLeft;
@@ -308,7 +287,7 @@ namespace SyntaxSolutions.PdfBuilder
             textBox.AddText(pdfFont, options.FontOptions.FontSize, DrawStyle.Normal, options.FontOptions.FontColor, text, (AnnotAction)null);
 
             // initial Y position
-            double positionY = this.pagePosition.Y + (options.FontOptions.FontSize / this.scaleFactor);  
+            double positionY = this.pagePosition.Y + (options.FontOptions.FontSize / this.document.ScaleFactor);  
 
             this.contents.DrawText(this.documentOptions.MarginLeft, ref positionY, this.documentOptions.MarginBottom, 0, 0.15, 0, TextBoxJustify.Left, textBox);
 
