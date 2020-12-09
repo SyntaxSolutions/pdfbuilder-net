@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -268,15 +267,32 @@ namespace SyntaxSolutions.PdfBuilder
         /// </summary>
         /// <param name="text"></param>
         /// <param name="options"></param>
-        public void AddParagraph(string text, TextOptions options = null)
+        public void AddParagraph(string text, ParagraphOptions options = null)
         {
             // default options
             if (options == null)
             {
-                options = new TextOptions()
+                options = new ParagraphOptions()
                 {
                     FontOptions = this.documentOptions.TextFontOptions
                 };
+            }
+
+            // convert TextAlignment to TextBoxJustify
+            var texBoxJustify = TextBoxJustify.Left;
+            switch (options.TextAlignment)
+            {
+                case TextAlignment.Center:
+                    texBoxJustify = TextBoxJustify.Center;
+                    break;
+
+                case TextAlignment.Right:
+                    texBoxJustify = TextBoxJustify.Right;
+                    break;
+
+                case TextAlignment.Justify:
+                    texBoxJustify = TextBoxJustify.FitToWidth;
+                    break;
             }
 
             this.pagePosition.X = this.documentOptions.MarginLeft;
@@ -289,7 +305,7 @@ namespace SyntaxSolutions.PdfBuilder
             // initial Y position
             double positionY = this.pagePosition.Y + (options.FontOptions.FontSize / this.document.ScaleFactor);  
 
-            this.contents.DrawText(this.documentOptions.MarginLeft, ref positionY, this.documentOptions.MarginBottom, 0, 0.15, 0, TextBoxJustify.Left, textBox);
+            this.contents.DrawText(this.documentOptions.MarginLeft, ref positionY, this.documentOptions.MarginBottom, 0, 0.15, 0, texBoxJustify, textBox);
 
             this.pagePosition.Y = positionY;
             this.NewLine();

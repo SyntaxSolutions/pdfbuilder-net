@@ -29,7 +29,7 @@ namespace PdfBuilder_tests
             var options = new DocumentOptions()
             {
                 PageSize = PageSize.A4,
-                PageOrientation = PageOrientation.Landscape
+                PageOrientation = PageOrientation.Portrait
             };
             var builder = new PdfBuilder(options);
 
@@ -38,16 +38,19 @@ namespace PdfBuilder_tests
 
             builder.Open();
 
+            //
+            // Fonts
+            //
             builder.NewPage();
-
-            builder.PagePositionY -= 5; 
-
+            builder.NewLine();
             builder.AddTitle("Fonts");
+            builder.NewLine();
 
+            builder.AddHeading("Styles");
             builder.AddText("Times New Roman - Normal");
             builder.NewLine();
 
-            builder.AddText("Times New Roman - Bold", TextOptions.Set(FontWeight: TextFontWeight.Bold, FontColor: Color.Red));
+            builder.AddText("Times New Roman - Bold", TextOptions.Set(FontWeight: TextFontWeight.Bold));
 
             builder.NewLine();
 
@@ -70,14 +73,50 @@ namespace PdfBuilder_tests
             builder.NewLine();
             builder.NewLine();
 
-            builder.AddTitle("Paragraph");
-            builder.AddParagraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
-            builder.AddParagraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", TextOptions.Set(FontColor: System.Drawing.Color.Red));
+            builder.AddHeading("Colors");
+            builder.AddText("Red", TextOptions.Set(FontColor: Color.Red));
+            builder.NewLine();
+            builder.AddText("Green", TextOptions.Set(FontColor: Color.Green));
+            builder.NewLine();
+            builder.AddText("Blue", TextOptions.Set(FontColor: Color.Blue));
+            builder.NewLine();
+
+
+            //
+            // Paragraphs
+            //
 
             builder.NewPage();
-            builder.AddHeading("Images");
+            builder.NewLine();
+            builder.AddTitle("Paragraphs");
+            builder.NewLine();
 
-            //string imagepath = @"TestImage.jpg";
+            builder.AddHeading("Left Aligned");
+            builder.AddParagraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+            builder.NewLine();
+
+            builder.AddHeading("Center Aligned");
+            builder.AddParagraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", ParagraphOptions.Set(TextAlignment: TextAlignment.Center));
+            builder.NewLine();
+
+            builder.AddHeading("Right Aligned");
+            builder.AddParagraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", ParagraphOptions.Set(TextAlignment: TextAlignment.Right));
+            builder.NewLine();
+
+            builder.AddHeading("Justified Aligned");
+            builder.AddParagraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", ParagraphOptions.Set(TextAlignment: TextAlignment.Justify));
+            builder.NewLine();
+
+
+            //
+            // Images
+            //
+
+            builder.NewPage();
+            builder.NewLine();
+            builder.AddTitle("Images");
+            builder.NewLine();
+
             string imagepath = @"Sunset.jpg";
             builder.AddImage(imagepath, 50);
             builder.NewLine();
@@ -87,6 +126,8 @@ namespace PdfBuilder_tests
 
             builder.AddImage(imagepath, 150);
             builder.NewLine();
+
+
 
 
             // save file 
