@@ -148,19 +148,6 @@ namespace SyntaxSolutions.PdfBuilder
 
             // build a new font dictionary for this document
             this.fontDictionary = new Dictionary<string, PdfFont>();
-            Dictionary<TextFontStyle, PdfFont> fontDictionary = new Dictionary<TextFontStyle, PdfFont>();
-        }
-
-        /// <summary>
-        /// Close the document
-        /// </summary>
-        public void Close()
-        {
-            if (this.stream != null)
-            {
-                this.stream.Close();
-                this.stream = null;
-            }
         }
 
         /// <summary>
@@ -169,7 +156,7 @@ namespace SyntaxSolutions.PdfBuilder
         /// <returns></returns>
         public byte[] GetBytes()
         {
-            if (this.stream != null)
+            if (this.document != null && this.stream != null)
             {
                 this.document.CreateFile();
                 return this.stream.ToArray();
@@ -179,10 +166,27 @@ namespace SyntaxSolutions.PdfBuilder
         }
 
         /// <summary>
+        /// Close the document
+        /// </summary>
+        public void Close()
+        {
+            this.document.Dispose();
+            this.document = null; 
+
+            if (this.stream != null)
+            {
+                this.stream.Close();
+                this.stream = null;
+            }
+        }
+
+        /// <summary>
         /// Add a new page to the document and reset the PagePosition
         /// </summary>
         public void NewPage()
         {
+            this.checkBuilderState();
+
             this.page = new PdfPage(this.document);
             this.contents = new PdfContents(this.page);
 
@@ -200,6 +204,8 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="lineHeight"></param>
         public void NewLine(double? lineHeight = null)
         {
+            this.checkBuilderState();
+
             if (!lineHeight.HasValue)
             {
                 lineHeight = (this.documentOptions.TextFontOptions.FontSize * 1.5) / this.document.ScaleFactor;
@@ -215,6 +221,8 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="text"></param>
         public void AddTitle(string text)
         {
+            this.checkBuilderState();
+
             var options = new TextOptions()
             {
                 FontOptions = this.documentOptions.TitleFontOptions
@@ -231,6 +239,8 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="text"></param>
         public void AddHeading(string text)
         {
+            this.checkBuilderState();
+
             var options = new TextOptions()
             {
                 FontOptions = this.documentOptions.HeadingFontOptions
@@ -248,7 +258,8 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="options"></param>
         public void AddText(string text, TextOptions options = null)
         {
-            // default options
+            this.checkBuilderState();
+
             if (options == null)
             {
                 options = new TextOptions()
@@ -269,7 +280,8 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="options"></param>
         public void AddParagraph(string text, ParagraphOptions options = null)
         {
-            // default options
+            this.checkBuilderState();
+
             if (options == null)
             {
                 options = new ParagraphOptions()
@@ -320,7 +332,8 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="options"></param>
         public void AddImage(string path, double width, ImageOptions options = null)
         {
-            // default options
+            this.checkBuilderState();
+
             if (options == null)
             {
                 options = new ImageOptions()
@@ -356,16 +369,16 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="fontStyle"></param>
         /// <param name="fontWeight"></param>
         /// <returns></returns>
-        private PdfFont getFont(TextFontOptions fontOptions)
+        private PdfFont getFont(TextFontOptions options)
         {
-            string fontKey = fontOptions.FontFamily.Value.Replace(" ", string.Empty).ToUpper();
+            string fontKey = options.FontFamily.Value.Replace(" ", string.Empty).ToUpper();
             System.Drawing.FontStyle drawingFontStyle;
-            switch (fontOptions.FontStyle)
+            switch (options.FontStyle)
             {
                 case TextFontStyle.Normal:
                     fontKey += "-R";
                     drawingFontStyle = System.Drawing.FontStyle.Regular;
-                    if (fontOptions.FontWeight == TextFontWeight.Bold)
+                    if (options.FontWeight == TextFontWeight.Bold)
                     {
                         drawingFontStyle = System.Drawing.FontStyle.Bold;
                         fontKey += "-B";
@@ -375,7 +388,7 @@ namespace SyntaxSolutions.PdfBuilder
                 case TextFontStyle.Italic:
                     fontKey += "-I";
                     drawingFontStyle = System.Drawing.FontStyle.Italic;
-                    if (fontOptions.FontWeight == TextFontWeight.Bold)
+                    if (options.FontWeight == TextFontWeight.Bold)
                     {
                         drawingFontStyle = System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic;
                         fontKey += "-B";
@@ -390,11 +403,22 @@ namespace SyntaxSolutions.PdfBuilder
 
             if (!this.fontDictionary.ContainsKey(fontKey))
             {
-                var pdfFont = PdfFont.CreatePdfFont(this.document, fontOptions.FontFamily.Value, drawingFontStyle, true);
+                var pdfFont = PdfFont.CreatePdfFont(this.document, options.FontFamily.Value, drawingFontStyle, true);
                 fontDictionary.Add(fontKey, pdfFont);
             }
 
             return this.fontDictionary[fontKey];
+        }
+
+        /// <summary>
+        /// Check the state of the builder and throw an exception if any issues found 
+        /// </summary>
+        private void checkBuilderState()
+        {
+            if (this.document == null)
+            {
+                throw new System.Exception("PdfBuilder.Open() must be called before adding content");
+            }
         }
 
     }
