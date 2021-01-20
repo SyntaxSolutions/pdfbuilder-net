@@ -1,8 +1,10 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Drawing;
 
 using PdfFileWriter; // https://www.codeproject.com/Articles/570682/PDF-File-Writer-Csharp-Class-Library-Version-1-27
+using Helpers = SyntaxSolutions.PdfBuilder.Helper;
 
 namespace SyntaxSolutions.PdfBuilder
 {
@@ -327,9 +329,9 @@ namespace SyntaxSolutions.PdfBuilder
         /// <summary>
         /// Add an image to the current page with a specified  width
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="width"></param>
-        /// <param name="options"></param>
+        /// <param name="path">Image file path</param>
+        /// <param name="width">Target width for image in mm</param>
+        /// <param name="options">ImageOptions</param>
         public void AddImage(string path, double width, ImageOptions options = null)
         {
             this.checkBuilderState();
@@ -343,10 +345,20 @@ namespace SyntaxSolutions.PdfBuilder
                 };
             }
 
+            // load the image from size and determine it new pixel dimensions based on relative resolutions 
+            var srcBitmap = new Bitmap(path);
+            double srcBitmapAspectRatio = srcBitmap.Size.Height / (srcBitmap.Size.Width * 1.0);
+            double widthInInches = width / 25.0;
+            int widthInPixels = Convert.ToInt32(Math.Round(widthInInches * srcBitmap.HorizontalResolution));
+            int heightInPixels = Convert.ToInt32(Math.Round(widthInPixels * srcBitmapAspectRatio));
+
+            // resize the source image and load into pdf
+            var targetBitmap = Helpers.ImageHelper.resizeImage(srcBitmap, widthInPixels, heightInPixels, Color.White);
+
             PdfImage pdfImage = new PdfImage(this.document);
             pdfImage.Resolution = options.Resolution;
             pdfImage.ImageQuality = options.Quality;
-            pdfImage.LoadImage(path);
+            pdfImage.LoadImage(targetBitmap);
 
             this.contents.SaveGraphicsState();
 

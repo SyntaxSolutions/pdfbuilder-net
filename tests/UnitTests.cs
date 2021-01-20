@@ -128,8 +128,6 @@ namespace PdfBuilder_tests
             builder.NewLine();
 
 
-
-
             // save file 
             var guid = System.Guid.NewGuid();
             string filepath = String.Format("TestPdfBuilder_{0}.pdf", guid.ToString("N"));
