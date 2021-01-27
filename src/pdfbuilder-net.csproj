@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\build\package-icon.png">
+    <None Include="..\build\package-icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

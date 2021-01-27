@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{568EE274-2F6
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfBuilder", "src\PdfBuilder\PdfBuilder.csproj", "{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pdfbuilder-net", "src\pdfbuilder-net.csproj", "{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{85A8EB8D-695F-4C21-9434-7B7A69EB669A}"
 EndProject

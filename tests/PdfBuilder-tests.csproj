@@ -57,9 +57,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\PdfBuilder\PdfBuilder.csproj">
+    <ProjectReference Include="..\src\pdfbuilder-net.csproj">
       <Project>{2bd38958-ae59-40b3-9fba-c3e31cfcdc6a}</Project>
-      <Name>PdfBuilder</Name>
+      <Name>pdfbuilder-net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

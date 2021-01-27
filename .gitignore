@@ -1,11 +1,9 @@
 /.vs
-/src/PdfBuilder/bin
-/src/PdfBuilder/obj
-/src/PdfFileWriter/bin
-/src/PdfFileWriter/obj
+/src/bin
+/src/obj
 /packages
 /tests/obj
 /tests/bin
 /tests/PdfBuilder-tests.csproj.user
-/src/Properties/PublishProfiles/FolderProfile.pubxml.user
-/src/PdfBuilder/PdfBuilder.csproj.user
+/src/PdfBuilder.csproj.user
+/src/pdfbuilder-net.csproj.user
