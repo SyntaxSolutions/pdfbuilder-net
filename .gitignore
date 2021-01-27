@@ -8,3 +8,4 @@
 /tests/bin
 /tests/PdfBuilder-tests.csproj.user
 /src/Properties/PublishProfiles/FolderProfile.pubxml.user
+/src/PdfBuilder/PdfBuilder.csproj.user

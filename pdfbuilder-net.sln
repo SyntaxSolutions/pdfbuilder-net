@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{116D66AF-F54B-4255-B770-45885E4918B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfFileWriter", "src\PdfFileWriter\PdfFileWriter.csproj", "{7B531568-9C87-4CC5-917D-28C43BCF5B38}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A2C1B0B4-125A-4278-A825-535BAE7802E7}"
 	ProjectSection(SolutionItems) = preProject
 		build\package-icon.png = build\package-icon.png
@@ -30,10 +28,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B531568-9C87-4CC5-917D-28C43BCF5B38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B531568-9C87-4CC5-917D-28C43BCF5B38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B531568-9C87-4CC5-917D-28C43BCF5B38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B531568-9C87-4CC5-917D-28C43BCF5B38}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,7 +41,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7B531568-9C87-4CC5-917D-28C43BCF5B38} = {116D66AF-F54B-4255-B770-45885E4918B3}
 		{2BD38958-AE59-40B3-9FBA-C3E31CFCDC6A} = {116D66AF-F54B-4255-B770-45885E4918B3}
 		{AE45DBAB-4723-47B5-8356-CF2110DAEC24} = {85A8EB8D-695F-4C21-9434-7B7A69EB669A}
 	EndGlobalSection
