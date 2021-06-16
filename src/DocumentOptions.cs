@@ -5,12 +5,41 @@ namespace SyntaxSolutions.PdfBuilder
 {
     public class DocumentOptions
     {
+        /// <summary>
+        /// Page size
+        /// </summary>
         public PageSize PageSize { get; set; }
+
+        /// <summary>
+        /// Page orientation
+        /// </summary>
         public PageOrientation PageOrientation { get; set; }
+        
+        /// <summary>
+        /// Size of left margin in millimetres
+        /// </summary>
         public double MarginLeft { get; set; }
+
+        /// <summary>
+        /// Size of top margin in millimetres
+        /// </summary>
         public double MarginTop { get; set; }
+
+        /// <summary>
+        /// Size of right margin in millimetres
+        /// </summary>
         public double MarginRight { get; set; }
+
+        /// <summary>
+        /// Size of bottom margin in millimetres
+        /// </summary>
         public double MarginBottom { get; set; }
+
+        /// <summary>
+        /// Default Font Family 
+        /// </summary>
+        public TextFontFamily DefaultFontFamily { get; set; }
+        
         public TextFontOptions TitleFontOptions { get; set; }
         public TextFontOptions HeadingFontOptions { get; set; }
         public TextFontOptions TextFontOptions { get; set; }
@@ -23,6 +52,7 @@ namespace SyntaxSolutions.PdfBuilder
             // default document settings
             this.PageSize = PageSize.A4;
             this.PageOrientation = PageOrientation.Portrait;
+            this.DefaultFontFamily = TextFontFamily.TimesNewRoman;
 
             this.MarginLeft = 10; // mm
             this.MarginTop = 10; // mm
@@ -32,7 +62,7 @@ namespace SyntaxSolutions.PdfBuilder
             // default font for titles
             this.TitleFontOptions = new TextFontOptions()
             {
-                FontFamily = TextFontFamily.TimesNewRoman,
+                FontFamily = this.DefaultFontFamily,
                 FontStyle = TextFontStyle.Normal,
                 FontWeight = TextFontWeight.Normal,
                 FontSize = 28, // points
@@ -42,7 +72,7 @@ namespace SyntaxSolutions.PdfBuilder
             // default font for headings
             this.HeadingFontOptions = new TextFontOptions()
             {
-                FontFamily = TextFontFamily.TimesNewRoman,
+                FontFamily = this.DefaultFontFamily,
                 FontStyle = TextFontStyle.Normal,
                 FontWeight = TextFontWeight.Normal,
                 FontSize = 16, // points
@@ -52,7 +82,7 @@ namespace SyntaxSolutions.PdfBuilder
             // default font for text/pragraphs
             this.TextFontOptions = new TextFontOptions()
             {
-                FontFamily = TextFontFamily.TimesNewRoman,
+                FontFamily = this.DefaultFontFamily,
                 FontStyle = TextFontStyle.Normal,
                 FontWeight = TextFontWeight.Normal,
                 FontSize = 12, // points
