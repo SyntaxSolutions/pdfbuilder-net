@@ -39,10 +39,26 @@ namespace SyntaxSolutions.PdfBuilder
         /// Default Font Family 
         /// </summary>
         public TextFontFamily DefaultFontFamily { get; set; }
-        
+
+        /// <summary>
+        /// TextFontOptions for document titles
+        /// </summary>
         public TextFontOptions TitleFontOptions { get; set; }
+
+        /// <summary>
+        /// TextFontOptions for document headings 
+        /// </summary>
         public TextFontOptions HeadingFontOptions { get; set; }
+
+        /// <summary>
+        /// TextFontOptions for document text 
+        /// </summary>
         public TextFontOptions TextFontOptions { get; set; }
+
+        /// <summary>
+        /// TextFontOptions for document paragraphs 
+        /// </summary>
+        public TextFontOptions ParagraphFontOptions { get; set; }
 
         /// <summary>
         /// Create a DocumentOptions with defaults
@@ -79,8 +95,18 @@ namespace SyntaxSolutions.PdfBuilder
                 FontColor = Color.Black
             };
 
-            // default font for text/pragraphs
+            // default font for text
             this.TextFontOptions = new TextFontOptions()
+            {
+                FontFamily = this.DefaultFontFamily,
+                FontStyle = TextFontStyle.Normal,
+                FontWeight = TextFontWeight.Normal,
+                FontSize = 12, // points
+                FontColor = Color.Black
+            };
+
+            // default font for paragraphs
+            this.ParagraphFontOptions = new TextFontOptions()
             {
                 FontFamily = this.DefaultFontFamily,
                 FontStyle = TextFontStyle.Normal,

@@ -288,7 +288,7 @@ namespace SyntaxSolutions.PdfBuilder
             {
                 options = new ParagraphOptions()
                 {
-                    FontOptions = this.documentOptions.TextFontOptions
+                    FontOptions = this.documentOptions.ParagraphFontOptions
                 };
             }
 
