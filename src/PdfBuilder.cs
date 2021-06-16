@@ -20,7 +20,7 @@ namespace SyntaxSolutions.PdfBuilder
         private DocumentOptions documentOptions;
 
         /// <summary>
-        /// Get the page height
+        /// Get the page width
         /// </summary>
         public double PageWidth
         {
@@ -31,7 +31,7 @@ namespace SyntaxSolutions.PdfBuilder
         }
 
         /// <summary>
-        /// Get the page width
+        /// Get the page height
         /// </summary>
         public double PageHeight
         {
