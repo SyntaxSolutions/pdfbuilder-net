@@ -14,14 +14,7 @@ namespace SyntaxSolutions.PdfBuilder
         /// </summary>
         public TextOptions()
         {
-            this.FontOptions = new TextFontOptions()
-            {
-                FontFamily = TextFontFamily.TimesNewRoman,
-                FontStyle = TextFontStyle.Normal,
-                FontWeight = TextFontWeight.Normal,
-                FontSize = 12, // points
-                FontColor = Color.Black
-            };
+            this.FontOptions = new TextFontOptions();
         }
 
         /// <summary>

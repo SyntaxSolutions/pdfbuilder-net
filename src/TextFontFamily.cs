@@ -1,6 +1,6 @@
 ﻿namespace SyntaxSolutions.PdfBuilder
 {
-    public class TextFontFamily
+   public class TextFontFamily
    {
         public string Value { get; set; }
         private TextFontFamily(string value) { Value = value; }

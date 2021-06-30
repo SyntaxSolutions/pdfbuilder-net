@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System;
 using System.Drawing;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -126,6 +127,65 @@ namespace PdfBuilder_tests
 
             builder.AddImage(imagepath, 150);
             builder.NewLine();
+
+
+            //
+            // Tables
+            //
+
+            builder.NewPage();
+            builder.NewLine();
+            builder.AddTitle("Tables");
+            builder.NewLine();
+
+            var table = new Table();
+
+            var headerCellOptions = TableCellOptions.Set(
+                TextAlignment: TextAlignment.Center,
+                FontSize: 14.0,
+                FontWeight: TextFontWeight.Bold,
+                FontFamily: TextFontFamily.Arial,
+                BackgroundColor: Color.LightGray
+            );
+
+            var headers = new TableRow();
+            headers.AddCell("Header 1", headerCellOptions);
+            headers.AddCell("Header 2", headerCellOptions);
+            headers.AddCell("Header 3", headerCellOptions);
+            table.AddHeaders(headers);
+
+            var defaultCellOptions = TableCellOptions.Set(
+                FontColor: Color.DarkGray
+            );
+
+            var row1 = new TableRow();
+            row1.AddCell("Row 1", defaultCellOptions);
+            row1.AddCell("Item 1", TableCellOptions.Set(FontColor: Color.Red));
+            row1.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
+            table.AddRow(row1);
+
+            var row2 = new TableRow();
+            row2.AddCell("Row 2", defaultCellOptions);
+            row2.AddCell("Item 2", TableCellOptions.Set(FontColor: Color.Red));
+            row2.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
+            table.AddRow(row2);
+
+            var row3 = new TableRow();
+            row2.AddCell("Row 3", defaultCellOptions);
+            row2.AddCell("Item 3", TableCellOptions.Set(FontColor: Color.Red));
+            row2.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
+            table.AddRow(row2);
+
+            var tableOptions = TableOptions.Set(
+                BorderHeaderWidth: 1.0,
+                BorderTopWidth: 0.0,
+                BorderBottomWidth: 1.0,
+                BorderHorizontalWidth: 0.8,
+                BorderVerticalWidth: 0.6, 
+                BorderVerticalColor: Color.DarkGray,
+                ColumnWidths: new List<double>(new double[] { 1.0, 2.0, 1.0 })
+            );
+            builder.AddTable(table, tableOptions);
 
 
             // save file 

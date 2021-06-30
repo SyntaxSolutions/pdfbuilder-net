@@ -18,7 +18,7 @@ namespace SyntaxSolutions.PdfBuilder
             this.FontFamily = TextFontFamily.TimesNewRoman;
             this.FontStyle = TextFontStyle.Normal;
             this.FontWeight = TextFontWeight.Normal;
-            this.FontSize = 12;
+            this.FontSize = 12; // points
             this.FontColor = Color.Black;
         }
     }

@@ -5,7 +5,10 @@ using System.Drawing.Imaging;
 
 namespace SyntaxSolutions.PdfBuilder.Helper
 {
-    internal class ImageHelper
+    /// <summary>
+    /// Collection of static helper methods used for images
+    /// </summary>
+    internal class Image
     {
         /// <summary>
         /// Resize the image to the specified width and height.
@@ -15,7 +18,7 @@ namespace SyntaxSolutions.PdfBuilder.Helper
         /// <param name="height">The height to resize to.</param>
         /// <param name="backgroundColor">Background color to render the image against to replace any transparent pixels</param>
         /// <returns>The resized image.</returns>
-        public static Bitmap resizeImage(Image image, int width, int height, Color backgroundColor)
+        public static Bitmap Resize(System.Drawing.Image image, int width, int height, Color backgroundColor)
         {
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);

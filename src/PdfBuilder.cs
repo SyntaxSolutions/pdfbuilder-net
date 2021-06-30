@@ -8,6 +8,9 @@ using Helpers = SyntaxSolutions.PdfBuilder.Helper;
 
 namespace SyntaxSolutions.PdfBuilder
 {
+    /// <summary>
+    /// A simple library used to generate PDF files
+    /// </summary>
     public class PdfBuilder
     {
         private PdfDocument document;
@@ -270,7 +273,7 @@ namespace SyntaxSolutions.PdfBuilder
                 };
             }
 
-            var pdfFont = this.getFont(options.FontOptions);
+            var pdfFont = this.getPdfFont(options.FontOptions);
             var textWidth = this.contents.DrawText(pdfFont, options.FontOptions.FontSize, this.pagePosition.X, this.pagePosition.Y, TextJustify.Left, DrawStyle.Normal, options.FontOptions.FontColor, text);
             this.pagePosition.X += textWidth;
         }
@@ -293,26 +296,12 @@ namespace SyntaxSolutions.PdfBuilder
             }
 
             // convert TextAlignment to TextBoxJustify
-            var texBoxJustify = TextBoxJustify.Left;
-            switch (options.TextAlignment)
-            {
-                case TextAlignment.Center:
-                    texBoxJustify = TextBoxJustify.Center;
-                    break;
-
-                case TextAlignment.Right:
-                    texBoxJustify = TextBoxJustify.Right;
-                    break;
-
-                case TextAlignment.Justify:
-                    texBoxJustify = TextBoxJustify.FitToWidth;
-                    break;
-            }
+            var texBoxJustify = Helpers.Convert.ToTextBoxJustify(options.TextAlignment);
 
             this.pagePosition.X = this.documentOptions.MarginLeft;
             double width = this.pageDimensions.Width - (this.documentOptions.MarginLeft + this.documentOptions.MarginRight);
 
-            var pdfFont = this.getFont(options.FontOptions);
+            var pdfFont = this.getPdfFont(options.FontOptions);
             TextBox textBox = new TextBox(width, 0, 0.5);
             textBox.AddText(pdfFont, options.FontOptions.FontSize, DrawStyle.Normal, options.FontOptions.FontColor, text, (AnnotAction)null);
 
@@ -324,7 +313,6 @@ namespace SyntaxSolutions.PdfBuilder
             this.pagePosition.Y = positionY;
             this.NewLine();
         }
-
 
         /// <summary>
         /// Add an image to the current page with a specified  width
@@ -353,7 +341,7 @@ namespace SyntaxSolutions.PdfBuilder
             int heightInPixels = Convert.ToInt32(Math.Round(widthInPixels * srcBitmapAspectRatio));
 
             // resize the source image and load into pdf
-            var targetBitmap = Helpers.ImageHelper.resizeImage(srcBitmap, widthInPixels, heightInPixels, Color.White);
+            var targetBitmap = Helpers.Image.Resize(srcBitmap, widthInPixels, heightInPixels, Color.White);
 
             PdfImage pdfImage = new PdfImage(this.document);
             pdfImage.Resolution = options.Resolution;
@@ -375,13 +363,164 @@ namespace SyntaxSolutions.PdfBuilder
         }
 
         /// <summary>
-        /// Get the PdfFont from the from the current documents font dictionary
+        /// Add a table to the current page
         /// </summary>
-        /// <param name="fontFamily"></param>
-        /// <param name="fontStyle"></param>
-        /// <param name="fontWeight"></param>
+        /// <param name="table"></param>
+        /// <param name="options"></param>
+        public void AddTable(Table table, TableOptions options = null)
+        {
+            this.checkBuilderState();
+
+            if (options == null)
+            {
+                options = new TableOptions();
+            }
+
+            PdfTable pdfTable = new PdfTable(this.page, this.contents);
+
+            // calculate table area relative to the page dimensions and current page position 
+            double left = this.documentOptions.MarginLeft;
+            double bottom = this.documentOptions.MarginBottom;
+            double right = (this.page.Width / this.page.ScaleFactor) - this.documentOptions.MarginRight;
+            double top = this.pagePosition.Y;
+            pdfTable.TableArea = new PdfRectangle(left, bottom, right, top);
+
+            // set table columns widths 
+            if (options.ColumnWidths == null)
+            {
+                options.ColumnWidths = new List<double>();
+                foreach (var cell in table.HeaderRow.Cells)
+                {
+                    // by default all column widths will be same size 
+                    options.ColumnWidths.Add(1.0);
+                }
+            }
+            pdfTable.SetColumnWidth(options.ColumnWidths.ToArray());
+
+            // set border widths and colors 
+            double borderHeaderWidth = options.BorderHeader.BorderWidth / this.document.ScaleFactor;
+            double borderTopWidth = options.BorderTop.BorderWidth / this.document.ScaleFactor;
+            double borderBottomWidth = options.BorderBottom.BorderWidth / this.document.ScaleFactor;
+            double borderHorizontalWidth = options.BorderHorizontal.BorderWidth / this.document.ScaleFactor;
+            double borderVerticalWidth = options.BorderVertical.BorderWidth / this.document.ScaleFactor;
+
+            pdfTable.Borders.ClearAllBorders();
+
+            if (borderHeaderWidth > 0.0)
+            {
+                pdfTable.Borders.HeaderHorBorder.Set(borderHeaderWidth, options.BorderHeader.BorderColor);
+            }
+            
+            if (borderTopWidth > 0.0)
+            {
+                pdfTable.Borders.TopBorder.Set(borderTopWidth, options.BorderTop.BorderColor);
+            }
+            
+            if (borderBottomWidth > 0.0)
+            {
+                pdfTable.Borders.BottomBorder.Set(borderBottomWidth, options.BorderBottom.BorderColor);
+            }
+            
+            if (borderHorizontalWidth > 0.0)
+            {
+                pdfTable.Borders.CellHorBorder.Set(borderHorizontalWidth, options.BorderHorizontal.BorderColor);
+            }
+            
+            if (borderVerticalWidth > 0.0)
+            {
+                // vertical border lines
+                pdfTable.Borders.HeaderVertBorder[0].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+                pdfTable.Borders.CellVertBorder[0].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+                for (int Index = 1; Index < pdfTable.Columns; Index++)
+                {
+                    pdfTable.Borders.HeaderVertBorder[Index].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+                    pdfTable.Borders.CellVertBorder[Index].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+                }
+                pdfTable.Borders.HeaderVertBorder[pdfTable.Columns].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+                pdfTable.Borders.CellVertBorder[pdfTable.Columns].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+            }
+
+
+            // default header styles  
+            pdfTable.DefaultHeaderStyle.TextBoxTextJustify = TextBoxJustify.Left;
+            pdfTable.DefaultHeaderStyle.Alignment = ContentAlignment.BottomLeft;
+            pdfTable.DefaultHeaderStyle.BackgroundColor = Color.Transparent;
+            //pdfTable.DefaultHeaderStyle.MultiLineText = true;
+            pdfTable.DefaultHeaderStyle.TextBoxLineBreakFactor = 0.2;
+
+            // default cell styles  
+            pdfTable.DefaultCellStyle.TextBoxTextJustify = TextBoxJustify.Left;
+            pdfTable.DefaultCellStyle.Alignment = ContentAlignment.BottomLeft;
+            pdfTable.DefaultCellStyle.BackgroundColor = Color.Transparent;
+            //pdfTable.DefaultCellStyle.MultiLineText = true;
+            pdfTable.DefaultCellStyle.TextBoxLineBreakFactor = 0.2;
+            //pdfTable.DefaultCellStyle.MinHeight = 2.0;
+
+            // header
+            /*
+            pdfTable.DefaultHeaderStyle.Alignment = ContentAlignment.MiddleCenter;
+            pdfTable.DefaultHeaderStyle.FontSize = 9.0;
+            pdfTable.DefaultHeaderStyle.MultiLineText = true;
+            pdfTable.DefaultHeaderStyle.TextBoxTextJustify = TextBoxJustify.Center;
+            pdfTable.DefaultHeaderStyle.BackgroundColor = Color.Blue;
+            pdfTable.DefaultHeaderStyle.ForegroundColor = Color.LightCyan;
+            pdfTable.DefaultHeaderStyle.TextBoxLineBreakFactor = 0.2;
+            */
+
+            // header columns 
+            for (int index = 0; index < options.ColumnWidths.Count; index++)
+            {
+                var cell = table.HeaderRow.Cells[index];
+
+                pdfTable.Header[index].Style = new PdfTableStyle()
+                {
+                    Font = this.getPdfFont(cell.Options.FontOptions),
+                    Alignment = Helpers.Convert.ToContentAlignment(cell.Options.TextAlignment),
+                    FontSize = cell.Options.FontOptions.FontSize,
+                    ForegroundColor = cell.Options.FontOptions.FontColor,
+                    BackgroundColor = cell.Options.BackgroundColor,
+                    Margin = new PdfRectangle(cell.Options.CellPadding)
+                };
+
+                pdfTable.Header[index].Type = CellType.Text;
+                pdfTable.Header[index].Value = cell.Text;
+            }
+
+            // rows 
+            foreach (var row in table.Rows)
+            {
+                for (int index = 0; index < options.ColumnWidths.Count; index++)
+                {
+                    var cell = row.Cells[index];
+
+                    pdfTable.Cell[index].Style = new PdfTableStyle()
+                    {
+                        Font = this.getPdfFont(cell.Options.FontOptions),
+                        Alignment = Helpers.Convert.ToContentAlignment(cell.Options.TextAlignment),
+                        FontSize = cell.Options.FontOptions.FontSize,
+                        ForegroundColor = cell.Options.FontOptions.FontColor,
+                        BackgroundColor = cell.Options.BackgroundColor,
+                        Margin = new PdfRectangle(cell.Options.CellPadding)
+                    };
+
+                    pdfTable.Cell[index].Type = CellType.Text;
+                    pdfTable.Cell[index].Value = cell.Text;
+                    pdfTable.Cell[index].CellHeight = 10.0 / this.document.ScaleFactor;
+                }
+
+                pdfTable.DrawRow();
+            }
+
+            pdfTable.Close(); 
+        }
+
+
+        /// <summary>
+        /// Get the PdfFont that best matches the specified TextFontOptions
+        /// </summary>
+        /// <param name="options"></param>
         /// <returns></returns>
-        private PdfFont getFont(TextFontOptions options)
+        private PdfFont getPdfFont(TextFontOptions options)
         {
             string fontKey = options.FontFamily.Value.Replace(" ", string.Empty).ToUpper();
             System.Drawing.FontStyle drawingFontStyle;
@@ -416,11 +555,12 @@ namespace SyntaxSolutions.PdfBuilder
             if (!this.fontDictionary.ContainsKey(fontKey))
             {
                 var pdfFont = PdfFont.CreatePdfFont(this.document, options.FontFamily.Value, drawingFontStyle, true);
-                fontDictionary.Add(fontKey, pdfFont);
+                this.fontDictionary.Add(fontKey, pdfFont);
             }
 
             return this.fontDictionary[fontKey];
         }
+
 
         /// <summary>
         /// Check the state of the builder and throw an exception if any issues found 
