@@ -23,6 +23,9 @@ namespace SyntaxSolutions.PdfBuilder
         /// </summary>
         public Color BackgroundColor { get; set; }
 
+        /// <summary>
+        /// Get or set the cell padding
+        /// </summary>
         public double CellPadding { get; set; }
 
         /// <summary>

@@ -188,6 +188,30 @@ namespace PdfBuilder_tests
             builder.AddTable(table, tableOptions);
 
 
+
+            //
+            // Lines
+            //
+
+            builder.NewPage();
+            builder.NewLine();
+            builder.AddTitle("Lines");
+            builder.NewLine();
+
+            var lineOptions = new LineOptions()
+            {
+                LineColor = Color.Blue,
+                LineWidth = 1.0
+            };
+            builder.AddLine(80, LineOptions.Set(LineColor: Color.Blue));
+            builder.NewLine();
+
+            builder.AddLine(140, LineOptions.Set(LineColor: Color.Green));
+            builder.NewLine();
+
+            builder.AddLine(190, LineOptions.Set(LineColor: Color.Red));
+
+
             // save file 
             var guid = System.Guid.NewGuid();
             string filepath = String.Format("TestPdfBuilder_{0}.pdf", guid.ToString("N"));

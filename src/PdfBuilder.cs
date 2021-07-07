@@ -206,18 +206,24 @@ namespace SyntaxSolutions.PdfBuilder
         /// <summary>
         /// Begin a new line on the current page 
         /// </summary>
-        /// <param name="lineHeight"></param>
+        /// <param name="lineHeight">Line height in mm</param>
         public void NewLine(double? lineHeight = null)
         {
             this.checkBuilderState();
 
-            if (!lineHeight.HasValue)
+            double height = 0.0; 
+            if (lineHeight.HasValue)
             {
-                lineHeight = (this.documentOptions.TextFontOptions.FontSize * 1.5) / this.document.ScaleFactor;
+                //height = lineHeight.Value / this.document.ScaleFactor;
+                height = lineHeight.Value;
+            }
+            else 
+            {
+                height = (this.documentOptions.TextFontOptions.FontSize * 1.5) / this.document.ScaleFactor;
             }
 
             this.pagePosition.X = this.documentOptions.MarginLeft;
-            this.pagePosition.Y -= lineHeight.Value;
+            this.pagePosition.Y -= height;
         }
 
         /// <summary>
@@ -315,7 +321,7 @@ namespace SyntaxSolutions.PdfBuilder
         }
 
         /// <summary>
-        /// Add an image to the current page with a specified  width
+        /// Add an image to the current page with a specified width
         /// </summary>
         /// <param name="path">Image file path</param>
         /// <param name="width">Target width for image in mm</param>
@@ -516,6 +522,28 @@ namespace SyntaxSolutions.PdfBuilder
 
 
         /// <summary>
+        /// Add a line of specific length to thepage at the current page position
+        /// </summary>
+        /// <param name="length">Length of line in mm</param>
+        /// <param name="options"></param>
+        public void AddLine(double length, LineOptions options = null)
+        {
+            if (options == null)
+            {
+                options = new LineOptions();
+            }
+            var positionStart = new Position(this.pagePosition.X, this.pagePosition.Y);
+            var postionEnd = new Position(this.pagePosition.X + length, this.pagePosition.Y);
+            var lineWidth = options.LineWidth / this.document.ScaleFactor;
+
+            this.contents.SaveGraphicsState();
+            this.contents.SetLineWidth(lineWidth);
+            this.contents.SetColorStroking(options.LineColor);
+            this.contents.DrawLine(positionStart.X, positionStart.Y, postionEnd.X, postionEnd.Y);
+            this.contents.RestoreGraphicsState();
+        }
+
+        /// <summary>
         /// Get the PdfFont that best matches the specified TextFontOptions
         /// </summary>
         /// <param name="options"></param>
@@ -560,7 +588,6 @@ namespace SyntaxSolutions.PdfBuilder
 
             return this.fontDictionary[fontKey];
         }
-
 
         /// <summary>
         /// Check the state of the builder and throw an exception if any issues found 
