@@ -211,15 +211,10 @@ namespace SyntaxSolutions.PdfBuilder
         {
             this.checkBuilderState();
 
-            double height = 0.0; 
+            double height = (this.documentOptions.TextFontOptions.FontSize * 1.5) / this.document.ScaleFactor; ; 
             if (lineHeight.HasValue)
             {
-                //height = lineHeight.Value / this.document.ScaleFactor;
                 height = lineHeight.Value;
-            }
-            else 
-            {
-                height = (this.documentOptions.TextFontOptions.FontSize * 1.5) / this.document.ScaleFactor;
             }
 
             this.pagePosition.X = this.documentOptions.MarginLeft;
@@ -342,7 +337,7 @@ namespace SyntaxSolutions.PdfBuilder
             // load the image from size and determine it new pixel dimensions based on relative resolutions 
             var srcBitmap = new Bitmap(path);
             double srcBitmapAspectRatio = srcBitmap.Size.Height / (srcBitmap.Size.Width * 1.0);
-            double widthInInches = width / 25.0;
+            double widthInInches = width / 25.4;
             int widthInPixels = Convert.ToInt32(Math.Round(widthInInches * srcBitmap.HorizontalResolution));
             int heightInPixels = Convert.ToInt32(Math.Round(widthInPixels * srcBitmapAspectRatio));
 
