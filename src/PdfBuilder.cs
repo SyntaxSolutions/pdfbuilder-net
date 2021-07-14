@@ -441,7 +441,6 @@ namespace SyntaxSolutions.PdfBuilder
                 pdfTable.Borders.CellVertBorder[pdfTable.Columns].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
             }
 
-
             // default header styles  
             pdfTable.DefaultHeaderStyle.TextBoxTextJustify = TextBoxJustify.Left;
             pdfTable.DefaultHeaderStyle.Alignment = ContentAlignment.BottomLeft;
@@ -457,17 +456,6 @@ namespace SyntaxSolutions.PdfBuilder
             pdfTable.DefaultCellStyle.TextBoxLineBreakFactor = 0.2;
             //pdfTable.DefaultCellStyle.MinHeight = 2.0;
 
-            // header
-            /*
-            pdfTable.DefaultHeaderStyle.Alignment = ContentAlignment.MiddleCenter;
-            pdfTable.DefaultHeaderStyle.FontSize = 9.0;
-            pdfTable.DefaultHeaderStyle.MultiLineText = true;
-            pdfTable.DefaultHeaderStyle.TextBoxTextJustify = TextBoxJustify.Center;
-            pdfTable.DefaultHeaderStyle.BackgroundColor = Color.Blue;
-            pdfTable.DefaultHeaderStyle.ForegroundColor = Color.LightCyan;
-            pdfTable.DefaultHeaderStyle.TextBoxLineBreakFactor = 0.2;
-            */
-
             // header columns 
             for (int index = 0; index < options.ColumnWidths.Count; index++)
             {
@@ -476,8 +464,8 @@ namespace SyntaxSolutions.PdfBuilder
                 pdfTable.Header[index].Style = new PdfTableStyle()
                 {
                     Font = this.getPdfFont(cell.Options.FontOptions),
-                    Alignment = Helpers.Convert.ToContentAlignment(cell.Options.TextAlignment),
                     FontSize = cell.Options.FontOptions.FontSize,
+                    Alignment = Helpers.Convert.ToContentAlignment(cell.Options.TextAlignment),
                     ForegroundColor = cell.Options.FontOptions.FontColor,
                     BackgroundColor = cell.Options.BackgroundColor,
                     Margin = new PdfRectangle(cell.Options.CellPadding)
