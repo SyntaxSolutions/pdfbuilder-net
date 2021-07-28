@@ -1,7 +1,10 @@
 ﻿
 namespace SyntaxSolutions.PdfBuilder
 {
-    public enum PageSize
+	/// <summary>
+	/// PageSize
+	/// </summary>
+	public enum PageSize
 	{
 		/// <summary>
 		/// A0 (841 x 1188mm)

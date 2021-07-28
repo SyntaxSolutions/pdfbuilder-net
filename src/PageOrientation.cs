@@ -1,6 +1,9 @@
 ﻿
 namespace SyntaxSolutions.PdfBuilder
 {
+    /// <summary>
+    /// PageOrientation
+    /// </summary>
     public enum PageOrientation
     {
         /// <summary>

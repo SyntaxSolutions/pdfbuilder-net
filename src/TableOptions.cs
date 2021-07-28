@@ -33,8 +33,6 @@ namespace SyntaxSolutions.PdfBuilder
         /// </summary>
         public TableBorderOptions BorderVertical { get; set; }
 
-
-
         /// <summary>
         /// Get or set table column widths
         /// </summary>
@@ -52,7 +50,6 @@ namespace SyntaxSolutions.PdfBuilder
             this.BorderVertical = new TableBorderOptions();
             this.ColumnWidths = null;
         }
-
 
         /// <summary>
         /// Return a TableOptions with parameters to set specific properties

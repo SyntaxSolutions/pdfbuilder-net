@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SyntaxSolutions.PdfBuilder
 {
+    /// <summary>
+    /// Table
+    /// </summary>
     public class Table
     {
         /// <summary>

@@ -30,7 +30,6 @@ namespace SyntaxSolutions.PdfBuilder
             this.Cells = new List<TableCell>();
         }
 
-
         /// <summary>
         /// Add a TableCell with value to the TableRow
         /// </summary>

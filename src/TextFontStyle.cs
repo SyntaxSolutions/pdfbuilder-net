@@ -1,6 +1,9 @@
 ﻿
 namespace SyntaxSolutions.PdfBuilder
 {
+    /// <summary>
+    /// TextFontStyle
+    /// </summary>
     public enum TextFontStyle
     {
         /// <summary>

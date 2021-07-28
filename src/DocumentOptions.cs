@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace SyntaxSolutions.PdfBuilder
 {
+    /// <summary>
+    /// DocumentOptions
+    /// </summary>
     public class DocumentOptions
     {
         /// <summary>

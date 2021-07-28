@@ -1,6 +1,9 @@
 ﻿namespace SyntaxSolutions.PdfBuilder
 {
-    public enum TextAlignment
+	/// <summary>
+	/// TextAlignment
+	/// </summary>
+	public enum TextAlignment
 	{
 		/// <summary>
 		/// Left

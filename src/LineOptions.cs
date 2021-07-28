@@ -7,18 +7,6 @@ namespace SyntaxSolutions.PdfBuilder
     /// </summary>
     public class LineOptions
     {
-        /*
-        /// <summary>
-        /// Get ot set the line start position
-        /// </summary>
-        public Position PositionStart { get; set; }
-
-        /// <summary>
-        /// Get ot set the line end position
-        /// </summary>
-        public Position PositionEnd { get; set; }
-        */
-
         /// <summary>
         /// Get or set the line width
         /// </summary>
@@ -34,8 +22,6 @@ namespace SyntaxSolutions.PdfBuilder
         /// </summary>
         public LineOptions()
         {
-            //this.PositionStart = new Position(0, 0);
-            //this.PositionEnd = new Position(0, 0);
             this.LineWidth = 1.0;
             this.LineColor = Color.Black;
         }
@@ -43,31 +29,15 @@ namespace SyntaxSolutions.PdfBuilder
         /// <summary>
         /// Return a LineOptions with parameters to set specific properties
         /// </summary>
-        /// <param name="PositionStart"></param>
-        /// <param name="PositionEnd"></param>
         /// <param name="LineWidth"></param>
         /// <param name="LineColor"></param>
         /// <returns></returns>
         public static LineOptions Set (
-            //Position PositionStart = null,
-            //Position PositionEnd = null,
             double? LineWidth = null,
             Color? LineColor = null
         )
         {
             var value = new LineOptions();
-
-            /*
-            if (PositionStart != null)
-            {
-                value.PositionStart = PositionStart;
-            }
-
-            if (PositionEnd != null)
-            {
-                value.PositionEnd = PositionEnd;
-            }
-            */
 
             if (LineWidth.HasValue)
             {

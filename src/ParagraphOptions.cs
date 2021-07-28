@@ -7,7 +7,14 @@ namespace SyntaxSolutions.PdfBuilder
     /// </summary>
     public class ParagraphOptions
     {
+        /// <summary>
+        /// FontOptions
+        /// </summary>
         public TextFontOptions FontOptions { get; set; }
+
+        /// <summary>
+        /// TextAlignment
+        /// </summary>
         public TextAlignment TextAlignment { get; set; }
 
         /// <summary>
@@ -34,7 +41,8 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="FontStyle"></param>
         /// <param name="FontWeight"></param>
         /// <param name="FontSize"></param>
-        /// <param name="Color"></param>
+        /// <param name="FontColor"></param>
+        /// <param name="TextAlignment"></param>
         /// <returns></returns>
         public static ParagraphOptions Set(
             TextFontFamily FontFamily = null,

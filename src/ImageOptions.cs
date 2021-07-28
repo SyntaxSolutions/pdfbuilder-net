@@ -7,9 +7,24 @@ namespace SyntaxSolutions.PdfBuilder
     /// </summary>
     public class ImageOptions
     {
+        /// <summary>
+        /// Resolution
+        /// </summary>
         public double Resolution { get; set; }
+
+        /// <summary>
+        /// Quality
+        /// </summary>
         public int Quality { get; set; }
+
+        /// <summary>
+        /// PositionX
+        /// </summary>
         public double PositionX { get; set; }
+
+        /// <summary>
+        /// PositionY
+        /// </summary>
         public double PositionY { get; set; }
 
         /// <summary>
@@ -28,8 +43,6 @@ namespace SyntaxSolutions.PdfBuilder
         /// </summary>
         /// <param name="Resolution"></param>
         /// <param name="Quality"></param>
-        /// <param name="Width"></param>
-        /// <param name="Height"></param>
         /// <param name="PositionX"></param>
         /// <param name="PositionY"></param>
         /// <returns></returns>

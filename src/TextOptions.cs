@@ -7,6 +7,9 @@ namespace SyntaxSolutions.PdfBuilder
     /// </summary>
     public class TextOptions
     {
+        /// <summary>
+        /// FontOptions
+        /// </summary>
         public TextFontOptions FontOptions { get; set; }
 
         /// <summary>
@@ -24,7 +27,7 @@ namespace SyntaxSolutions.PdfBuilder
         /// <param name="FontStyle"></param>
         /// <param name="FontWeight"></param>
         /// <param name="FontSize"></param>
-        /// <param name="Color"></param>
+        /// <param name="FontColor"></param>
         /// <returns></returns>
         public static TextOptions Set(
             TextFontFamily FontFamily = null,
