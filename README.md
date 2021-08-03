@@ -4,10 +4,10 @@ A simple .Net library used to create portable document format (PDF) documents.
 ## Features
 
 1. Two built in fonts 'Arial' and 'Times New Roman'
-1. Methods to easily add a page title, heading, text, paragraph and image to a document
+1. Methods to easily add a page title, heading, text, paragraph, table, line and image to a document
+1. Event driven page header and footer rendering
 1. Support for all standard page sizes and orientations
 1. Page coorindates and sizes specified in millimetres (mm)
-1. Support for page headers and footers
 
 ## Installation
 
@@ -120,6 +120,78 @@ builder.NewLine();
 
 builder.AddImage(imagepath, 150);
 builder.NewLine();
+
+builder.NewPage();
+builder.NewLine();
+builder.AddTitle("Tables");
+builder.NewLine();
+
+var table = new Table();
+
+var headerCellOptions = TableCellOptions.Set(
+    TextAlignment: TextAlignment.Center,
+    FontSize: 14.0,
+    FontWeight: TextFontWeight.Bold,
+    FontFamily: TextFontFamily.Arial,
+    BackgroundColor: Color.LightGray
+);
+
+var headers = new TableRow();
+headers.AddCell("Header 1", headerCellOptions);
+headers.AddCell("Header 2", headerCellOptions);
+headers.AddCell("Header 3", headerCellOptions);
+table.AddHeaders(headers);
+
+var defaultCellOptions = TableCellOptions.Set(
+    FontColor: Color.DarkGray
+);
+
+var row1 = new TableRow();
+row1.AddCell("Row 1", defaultCellOptions);
+row1.AddCell("Item 1", TableCellOptions.Set(FontColor: Color.Red));
+row1.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
+table.AddRow(row1);
+
+var row2 = new TableRow();
+row2.AddCell("Row 2", defaultCellOptions);
+row2.AddCell("Item 2", TableCellOptions.Set(FontColor: Color.Red));
+row2.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
+table.AddRow(row2);
+
+var row3 = new TableRow();
+row2.AddCell("Row 3", defaultCellOptions);
+row2.AddCell("Item 3", TableCellOptions.Set(FontColor: Color.Red));
+row2.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
+table.AddRow(row2);
+
+var tableOptions = TableOptions.Set(
+    BorderHeaderWidth: 1.0,
+    BorderTopWidth: 0.0,
+    BorderBottomWidth: 1.0,
+    BorderHorizontalWidth: 0.8,
+    BorderVerticalWidth: 0.6, 
+    BorderVerticalColor: Color.DarkGray,
+    ColumnWidths: new List<double>(new double[] { 1.0, 2.0, 1.0 })
+);
+builder.AddTable(table, tableOptions);
+
+builder.NewPage();
+builder.NewLine();
+builder.AddTitle("Lines");
+builder.NewLine();
+
+var lineOptions = new LineOptions()
+{
+    LineColor = Color.Blue,
+    LineWidth = 1.0
+};
+builder.AddLine(80, LineOptions.Set(LineColor: Color.Blue));
+builder.NewLine();
+
+builder.AddLine(140, LineOptions.Set(LineColor: Color.Green));
+builder.NewLine();
+
+builder.AddLine(190, LineOptions.Set(LineColor: Color.Red));
 
 // save file 
 var guid = System.Guid.NewGuid();
