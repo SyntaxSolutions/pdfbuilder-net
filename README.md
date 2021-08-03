@@ -194,10 +194,7 @@ builder.NewLine();
 builder.AddLine(190, LineOptions.Set(LineColor: Color.Red));
 
 // save file 
-var guid = System.Guid.NewGuid();
-string filepath = "Test.pdf";
-
-using (var fileStream = new FileStream(filepath, FileMode.Create, FileAccess.Write))
+using (var fileStream = new FileStream("Test.pdf", FileMode.Create, FileAccess.Write))
 {
     byte[] data = builder.GetBytes();
     fileStream.Write(data, 0, data.Length);
