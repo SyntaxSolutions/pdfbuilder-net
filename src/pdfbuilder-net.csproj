@@ -18,7 +18,7 @@
     <PackageProjectUrl>https://github.com/SyntaxSolutions/pdfbuilder-net</PackageProjectUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0-beta</Version>
+    <Version>1.0.0-rc</Version>
     <RepositoryUrl>https://github.com/SyntaxSolutions/pdfbuilder-net</RepositoryUrl>
   </PropertyGroup>
 
