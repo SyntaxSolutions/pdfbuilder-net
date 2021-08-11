@@ -24,9 +24,13 @@ namespace SyntaxSolutions.PdfBuilder
         /// <summary>
         /// Create a new TableRow
         /// </summary>
-        public TableRow()
+        public TableRow(TableRowOptions options = null)
         {
-            this.Options = new TableRowOptions();
+            if (options == null)
+            {
+                options = new TableRowOptions();
+            }
+            this.Options = options;
             this.Cells = new List<TableCell>();
         }
 
@@ -39,7 +43,7 @@ namespace SyntaxSolutions.PdfBuilder
         {
             if (options == null)
             {
-                options = new TableCellOptions();
+                options = this.Options.TableCellOptions;
             }
 
             var cell = new TableCell(text) 

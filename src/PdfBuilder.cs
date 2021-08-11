@@ -23,6 +23,17 @@ namespace SyntaxSolutions.PdfBuilder
         private DocumentOptions documentOptions;
 
         /// <summary>
+        /// Get DocumentOptions
+        /// </summary>
+        public DocumentOptions DocumentOptions
+        {
+            get
+            {
+                return this.documentOptions;
+            }
+        }
+
+        /// <summary>
         /// Get the page width
         /// </summary>
         public double PageWidth
@@ -100,33 +111,18 @@ namespace SyntaxSolutions.PdfBuilder
         /// <summary>
         /// Create a new PdfBuilder
         /// </summary>
-        public PdfBuilder()
-        {
-            var options = new DocumentOptions();
-            this.init(options);
-        }
+        public PdfBuilder() : this(null) { }
 
         /// <summary>
         /// Create a new PdfBuilder
         /// </summary>
         /// <param name="options"></param>
-        public PdfBuilder(DocumentOptions options)
+        public PdfBuilder(DocumentOptions options = null)
         {
-            this.init(options);
-        }
-
-        /// <summary>
-        /// Set initial PdfBuilder object state
-        /// </summary>
-        /// <param name="options"></param>
-        private void init(DocumentOptions options)
-        {
-            // use default option if none given 
             if (options == null)
             {
                 options = new DocumentOptions();
             }
-
             this.documentOptions = options;
         }
 
@@ -367,15 +363,9 @@ namespace SyntaxSolutions.PdfBuilder
         /// Add a table to the current page
         /// </summary>
         /// <param name="table"></param>
-        /// <param name="options"></param>
-        public void AddTable(Table table, TableOptions options = null)
+        public void AddTable(Table table)
         {
             this.checkBuilderState();
-
-            if (options == null)
-            {
-                options = new TableOptions();
-            }
 
             PdfTable pdfTable = new PdfTable(this.page, this.contents);
 
@@ -387,58 +377,58 @@ namespace SyntaxSolutions.PdfBuilder
             pdfTable.TableArea = new PdfRectangle(left, bottom, right, top);
 
             // set table columns widths 
-            if (options.ColumnWidths == null)
+            if (table.Options.ColumnWidths == null)
             {
-                options.ColumnWidths = new List<double>();
+                table.Options.ColumnWidths = new List<double>();
                 foreach (var cell in table.HeaderRow.Cells)
                 {
                     // by default all column widths will be same size 
-                    options.ColumnWidths.Add(1.0);
+                    table.Options.ColumnWidths.Add(1.0);
                 }
             }
-            pdfTable.SetColumnWidth(options.ColumnWidths.ToArray());
+            pdfTable.SetColumnWidth(table.Options.ColumnWidths.ToArray());
 
             // set border widths and colors 
-            double borderHeaderWidth = options.BorderHeader.BorderWidth / this.document.ScaleFactor;
-            double borderTopWidth = options.BorderTop.BorderWidth / this.document.ScaleFactor;
-            double borderBottomWidth = options.BorderBottom.BorderWidth / this.document.ScaleFactor;
-            double borderHorizontalWidth = options.BorderHorizontal.BorderWidth / this.document.ScaleFactor;
-            double borderVerticalWidth = options.BorderVertical.BorderWidth / this.document.ScaleFactor;
+            double borderHeaderWidth = table.Options.BorderHeader.BorderWidth / this.document.ScaleFactor;
+            double borderTopWidth = table.Options.BorderTop.BorderWidth / this.document.ScaleFactor;
+            double borderBottomWidth = table.Options.BorderBottom.BorderWidth / this.document.ScaleFactor;
+            double borderHorizontalWidth = table.Options.BorderHorizontal.BorderWidth / this.document.ScaleFactor;
+            double borderVerticalWidth = table.Options.BorderVertical.BorderWidth / this.document.ScaleFactor;
 
             pdfTable.Borders.ClearAllBorders();
 
             if (borderHeaderWidth > 0.0)
             {
-                pdfTable.Borders.HeaderHorBorder.Set(borderHeaderWidth, options.BorderHeader.BorderColor);
+                pdfTable.Borders.HeaderHorBorder.Set(borderHeaderWidth, table.Options.BorderHeader.BorderColor);
             }
             
             if (borderTopWidth > 0.0)
             {
-                pdfTable.Borders.TopBorder.Set(borderTopWidth, options.BorderTop.BorderColor);
+                pdfTable.Borders.TopBorder.Set(borderTopWidth, table.Options.BorderTop.BorderColor);
             }
             
             if (borderBottomWidth > 0.0)
             {
-                pdfTable.Borders.BottomBorder.Set(borderBottomWidth, options.BorderBottom.BorderColor);
+                pdfTable.Borders.BottomBorder.Set(borderBottomWidth, table.Options.BorderBottom.BorderColor);
             }
             
             if (borderHorizontalWidth > 0.0)
             {
-                pdfTable.Borders.CellHorBorder.Set(borderHorizontalWidth, options.BorderHorizontal.BorderColor);
+                pdfTable.Borders.CellHorBorder.Set(borderHorizontalWidth, table.Options.BorderHorizontal.BorderColor);
             }
             
             if (borderVerticalWidth > 0.0)
             {
                 // vertical border lines
-                pdfTable.Borders.HeaderVertBorder[0].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
-                pdfTable.Borders.CellVertBorder[0].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+                pdfTable.Borders.HeaderVertBorder[0].Set(borderVerticalWidth, table.Options.BorderVertical.BorderColor);
+                pdfTable.Borders.CellVertBorder[0].Set(borderVerticalWidth, table.Options.BorderVertical.BorderColor);
                 for (int Index = 1; Index < pdfTable.Columns; Index++)
                 {
-                    pdfTable.Borders.HeaderVertBorder[Index].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
-                    pdfTable.Borders.CellVertBorder[Index].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+                    pdfTable.Borders.HeaderVertBorder[Index].Set(borderVerticalWidth, table.Options.BorderVertical.BorderColor);
+                    pdfTable.Borders.CellVertBorder[Index].Set(borderVerticalWidth, table.Options.BorderVertical.BorderColor);
                 }
-                pdfTable.Borders.HeaderVertBorder[pdfTable.Columns].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
-                pdfTable.Borders.CellVertBorder[pdfTable.Columns].Set(borderVerticalWidth, options.BorderVertical.BorderColor);
+                pdfTable.Borders.HeaderVertBorder[pdfTable.Columns].Set(borderVerticalWidth, table.Options.BorderVertical.BorderColor);
+                pdfTable.Borders.CellVertBorder[pdfTable.Columns].Set(borderVerticalWidth, table.Options.BorderVertical.BorderColor);
             }
 
             // default header styles  
@@ -457,7 +447,7 @@ namespace SyntaxSolutions.PdfBuilder
             //pdfTable.DefaultCellStyle.MinHeight = 2.0;
 
             // header columns 
-            for (int index = 0; index < options.ColumnWidths.Count; index++)
+            for (int index = 0; index < table.Options.ColumnWidths.Count; index++)
             {
                 var cell = table.HeaderRow.Cells[index];
 
@@ -478,7 +468,7 @@ namespace SyntaxSolutions.PdfBuilder
             // rows 
             foreach (var row in table.Rows)
             {
-                for (int index = 0; index < options.ColumnWidths.Count; index++)
+                for (int index = 0; index < table.Options.ColumnWidths.Count; index++)
                 {
                     var cell = row.Cells[index];
 

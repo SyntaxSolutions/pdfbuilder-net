@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace SyntaxSolutions.PdfBuilder
 {
@@ -11,6 +8,11 @@ namespace SyntaxSolutions.PdfBuilder
     /// </summary>
     public class Table
     {
+        /// <summary>
+        /// TableOptions
+        /// </summary>
+        public TableOptions Options { get; set; }
+
         /// <summary>
         /// List of rows for this Table 
         /// </summary>
@@ -22,14 +24,24 @@ namespace SyntaxSolutions.PdfBuilder
         public TableRow HeaderRow { get; set; }
 
         /// <summary>
+        ///  Create a new Table
+        /// </summary>
+        public Table() : this(null) { }
+
+        /// <summary>
         /// Create a new Table
         /// </summary>
-        public Table()
+        /// <param name="options"></param>
+        public Table(TableOptions options = null)
         {
+            if (options == null)
+            {
+                options = new TableOptions();
+            }
+            this.Options = options;
             this.Rows = new List<TableRow>();
             this.HeaderRow = new TableRow();
         }
-
 
         /// <summary>
         /// Add TableRow which will be used for this Table's column headers 
@@ -45,7 +57,6 @@ namespace SyntaxSolutions.PdfBuilder
             this.HeaderRow = row;
             this.HeaderRow.Options = options;
         }
-
 
         /// <summary>
         /// Add a table row 

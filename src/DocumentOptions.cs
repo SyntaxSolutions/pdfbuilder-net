@@ -8,6 +8,8 @@ namespace SyntaxSolutions.PdfBuilder
     /// </summary>
     public class DocumentOptions
     {
+        private TextFontFamily defaultFontFamily;
+
         /// <summary>
         /// Page size
         /// </summary>
@@ -17,7 +19,7 @@ namespace SyntaxSolutions.PdfBuilder
         /// Page orientation
         /// </summary>
         public PageOrientation PageOrientation { get; set; }
-        
+
         /// <summary>
         /// Size of left margin in millimetres
         /// </summary>
@@ -41,7 +43,29 @@ namespace SyntaxSolutions.PdfBuilder
         /// <summary>
         /// Default Font Family 
         /// </summary>
-        public TextFontFamily DefaultFontFamily { get; set; }
+        public TextFontFamily DefaultFontFamily 
+        {
+            get
+            {
+                return this.defaultFontFamily;
+            }
+            set
+            {
+                this.defaultFontFamily = value;
+
+                if (this.TitleFontOptions != null)
+                    this.TitleFontOptions.FontFamily = this.defaultFontFamily;
+
+                if (this.HeadingFontOptions != null)
+                    this.HeadingFontOptions.FontFamily = this.defaultFontFamily;
+
+                if (this.TextFontOptions != null)
+                    this.TextFontOptions.FontFamily = this.defaultFontFamily;
+
+                if (this.ParagraphFontOptions != null)
+                    this.ParagraphFontOptions.FontFamily = this.defaultFontFamily;
+            }
+        }
 
         /// <summary>
         /// TextFontOptions for document titles
