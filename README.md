@@ -34,23 +34,28 @@ private void PageFooter(PdfBuilder builder, PageFooterEventArgs e)
     builder.PagePositionY = postionY;
 }
 
-var options = new DocumentOptions()
+var documentOptions = new DocumentOptions()
 {
     PageSize = PageSize.A4,
-    PageOrientation = PageOrientation.Portrait
+    PageOrientation = PageOrientation.Portrait,
+    DefaultFontFamily = TextFontFamily.TimesNewRoman,
 };
-var builder = new PdfBuilder(options);
+var builder = new PdfBuilder(documentOptions);
 
 builder.PageHeader += new PageHeaderEventHandler(this.PageHeader);
 builder.PageFooter += new PageFooterEventHandler(this.PageFooter);
 
 builder.Open();
 
+//
+// Fonts
+//
 builder.NewPage();
-builder.AddTitle("Page Title");
+builder.NewLine();
+builder.AddTitle("Fonts");
 builder.NewLine();
 
-builder.AddHeading("Font Styles");
+builder.AddHeading("Styles");
 builder.AddText("Times New Roman - Normal");
 builder.NewLine();
 
@@ -85,6 +90,11 @@ builder.NewLine();
 builder.AddText("Blue", TextOptions.Set(FontColor: Color.Blue));
 builder.NewLine();
 
+
+//
+// Paragraphs
+//
+
 builder.NewPage();
 builder.NewLine();
 builder.AddTitle("Paragraphs");
@@ -106,6 +116,11 @@ builder.AddHeading("Justified Aligned");
 builder.AddParagraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", ParagraphOptions.Set(TextAlignment: TextAlignment.Justify));
 builder.NewLine();
 
+
+//
+// Images
+//
+
 builder.NewPage();
 builder.NewLine();
 builder.AddTitle("Images");
@@ -121,59 +136,89 @@ builder.NewLine();
 builder.AddImage(imagepath, 150);
 builder.NewLine();
 
+
+//
+// Tables
+//
+
 builder.NewPage();
 builder.NewLine();
 builder.AddTitle("Tables");
 builder.NewLine();
 
-var table = new Table();
-
-var headerCellOptions = TableCellOptions.Set(
-    TextAlignment: TextAlignment.Center,
-    FontSize: 14.0,
-    FontWeight: TextFontWeight.Bold,
-    FontFamily: TextFontFamily.Arial,
-    BackgroundColor: Color.LightGray
-);
-
-var headers = new TableRow();
-headers.AddCell("Header 1", headerCellOptions);
-headers.AddCell("Header 2", headerCellOptions);
-headers.AddCell("Header 3", headerCellOptions);
-table.AddHeaders(headers);
-
-var defaultCellOptions = TableCellOptions.Set(
-    FontColor: Color.DarkGray
-);
-
-var row1 = new TableRow();
-row1.AddCell("Row 1", defaultCellOptions);
-row1.AddCell("Item 1", TableCellOptions.Set(FontColor: Color.Red));
-row1.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
-table.AddRow(row1);
-
-var row2 = new TableRow();
-row2.AddCell("Row 2", defaultCellOptions);
-row2.AddCell("Item 2", TableCellOptions.Set(FontColor: Color.Red));
-row2.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
-table.AddRow(row2);
-
-var row3 = new TableRow();
-row2.AddCell("Row 3", defaultCellOptions);
-row2.AddCell("Item 3", TableCellOptions.Set(FontColor: Color.Red));
-row2.AddCell("123.00", TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen));
-table.AddRow(row2);
-
 var tableOptions = TableOptions.Set(
+    DefaultFontFamily: TextFontFamily.TimesNewRoman,
     BorderHeaderWidth: 1.0,
     BorderTopWidth: 0.0,
     BorderBottomWidth: 1.0,
     BorderHorizontalWidth: 0.8,
-    BorderVerticalWidth: 0.6, 
+    BorderVerticalWidth: 0.6,
     BorderVerticalColor: Color.DarkGray,
     ColumnWidths: new List<double>(new double[] { 1.0, 2.0, 1.0 })
 );
-builder.AddTable(table, tableOptions);
+
+var table = new Table(tableOptions);
+
+var headerCellOptions = new TableCellOptions()
+{
+    FontOptions = table.Options.HeaderFontOptions,
+    TextAlignment = TextAlignment.Center,
+    BackgroundColor = Color.LightGray
+};
+
+// change font family from the default
+headerCellOptions.FontOptions.FontFamily = TextFontFamily.Arial;
+
+var headerRowOptions = TableRowOptions.Set(TableCellOptions: headerCellOptions);
+
+var headers = new TableRow(headerRowOptions);
+headers.AddCell("Header 1");
+headers.AddCell("Header 2");
+headers.AddCell("Header 3");
+table.AddHeaders(headers);
+
+
+// default options for a table cell 
+var defaultTableCellOptions = new TableCellOptions()
+{
+    FontOptions = table.Options.CellFontOptions,
+};
+
+// change the font color
+defaultTableCellOptions.FontOptions.FontColor = Color.DarkGray;
+
+// specific cell options 
+var descriptionTableCellOptions = TableCellOptions.Set(FontColor: Color.Red, FontFamily: table.Options.DefaultFontFamily);
+var amountTableCellOptions = TableCellOptions.Set(TextAlignment: TextAlignment.Right, BackgroundColor: Color.LightGreen, FontFamily: TextFontFamily.Arial);
+
+// default options for a table row
+var defaultTableRowOptions = TableRowOptions.Set(TableCellOptions: defaultTableCellOptions);
+
+var row1 = new TableRow(defaultTableRowOptions);
+row1.AddCell("Row 1");
+row1.AddCell("Item 1", descriptionTableCellOptions);
+row1.AddCell("123.00", amountTableCellOptions);
+table.AddRow(row1);
+
+var row2 = new TableRow(defaultTableRowOptions);
+row2.AddCell("Row 2");
+row2.AddCell("Item 2", descriptionTableCellOptions);
+row2.AddCell("123.00", amountTableCellOptions);
+table.AddRow(row2);
+
+var row3 = new TableRow(defaultTableRowOptions);
+row2.AddCell("Row 3");
+row2.AddCell("Item 3", descriptionTableCellOptions);
+row2.AddCell("123.00", amountTableCellOptions);
+table.AddRow(row2);
+
+builder.AddTable(table);
+
+
+
+//
+// Lines
+//
 
 builder.NewPage();
 builder.NewLine();
@@ -193,7 +238,10 @@ builder.NewLine();
 
 builder.AddLine(190, LineOptions.Set(LineColor: Color.Red));
 
+
+//
 // save file 
+//
 using (var fileStream = new FileStream("Test.pdf", FileMode.Create, FileAccess.Write))
 {
     byte[] data = builder.GetBytes();
